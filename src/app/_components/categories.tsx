@@ -1,6 +1,9 @@
 // components/Categories.js
 
-export const Categories = () => {
+import { db } from "~/server/db";
+import { postsTable, usersTable } from "~/server/db/schema";
+
+export const Categories = async () => {
     const categories = [
       { name: 'Vehicles', icon: '🚗' },
       { name: 'Phones', icon: '📱' },
@@ -11,6 +14,8 @@ export const Categories = () => {
       { name: 'Furniture', icon: '🛋️' },
       { name: 'Pets', icon: '🐕' },
     ];
+
+    const users = await db.select().from(usersTable).all();
   
     return (
       <div className="flex justify-center flex-wrap gap-6 mt-6">
