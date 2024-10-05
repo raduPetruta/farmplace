@@ -1,37 +1,39 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 // @ts-ignore
 import { v4 as uuid } from 'uuid'
-import { db } from '~/server/db';
-import { posts } from '~/server/schemas/posts';
 import { createPost } from './actions';
 import { useUser } from '@clerk/nextjs';
+import { getImagesUrls, SimpleUploadButton } from '~/app/_components/simple-upload-button';
+import { useRouter } from 'next/navigation';
 
 const NewPost = () => {
-
+  const router = useRouter();
   const loggedInUser = useUser().user!;
-  
   const [title, setTitle] = useState('');
   const [price, setPrice] = useState('');
   const [condition, setCondition] = useState('new');
-  const [images, setImages] = useState('');
   const [description, setDescription] = useState('');
   const [location, setLocation] = useState('');
   const [isNegotiable, setIsNegotiable] = useState(false);
-  const [userId, setUserId] = useState('');
   
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     
-    console.log(loggedInUser)
+    const images = getImagesUrls();
+    let imagesUrls : String = "";
+
+    images.map((image: any) => {
+      imagesUrls += image[0].url + ",";
+    });
 
     const newPost = {
       id: uuid(),
       userId: loggedInUser.id,
       title,
       description,
-      imagesUrls : JSON.stringify(images),
+      imagesUrls : imagesUrls,
       location,
       price,
       isNegotiable,
@@ -41,11 +43,10 @@ const NewPost = () => {
     };
     
     await createPost(newPost);
-
+    if(newPost)
+      router.push('/');
     console.log('New Post:', newPost);
   };
-
-
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-[#f5f5f5]">
@@ -88,11 +89,7 @@ const NewPost = () => {
 
           <div className="mb-4">
             <label className="block text-gray-700 font-bold mb-2">Images (comma-separated URLs)</label>
-            <input
-              type="text"
-              className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-[#00c4cc]"
-              onChange={(e) => setImages(e.target.value)}
-            />
+            <SimpleUploadButton/>
           </div>
 
           <div className="mb-4">
