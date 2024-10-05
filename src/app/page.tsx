@@ -10,7 +10,6 @@ export default function HomePage() {
         <SearchBar />
         <Categories />
         <Posts/>
-        {/* Add any other content */}
       </div>
     </main>
   );
