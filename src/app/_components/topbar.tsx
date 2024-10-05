@@ -1,7 +1,7 @@
 // components/Topbar.js
 'use client'
 
-import { UserButton, useUser } from '@clerk/nextjs';
+import { SignedIn, SignedOut, UserButton, useUser } from '@clerk/nextjs';
 import { useRouter } from 'next/navigation';
 import { FaHeart, FaRegComment, FaBell, FaUserCircle } from 'react-icons/fa';
 
@@ -9,6 +9,9 @@ export const Topbar = () => {
 
   const router = useRouter();
 
+  const onLogoClick = () => {
+    router.push('/');
+  };
   const onUserClick = () => {
     router.push('/profile');
   };
@@ -30,8 +33,9 @@ export const Topbar = () => {
   return (
     <div className="flex justify-between items-center p-4 bg-[#003338] text-white">
       {/* Logo */}
-      <div className="text-2xl font-bold text-[#00c4cc] uppercase">Farmplace</div>
-
+      <div className="text-2xl font-bold text-[#00c4cc] uppercase">
+        <span className="flex items-center cursor-pointer" onClick={onLogoClick}>Farmplace</span>
+      </div>
       {/* Center Links */}
       <div className="flex space-x-6">
         <span className="flex items-center cursor-pointer" onClick={onChatsClick}>
@@ -44,12 +48,12 @@ export const Topbar = () => {
           <FaBell className="mr-1" />
         </span>
         <span className="flex items-center cursor-pointer" onClick={onUserClick}>
-          {loggedInUser ? (
-            <div>logh</div>
-          ) : (
-            <div>nooo</div>
-          )}
-          <FaUserCircle className="mr-1" /> 
+          <SignedIn>
+            <UserButton/>
+          </SignedIn>
+          <SignedOut>
+            <FaUserCircle className="mr-1" /> 
+          </SignedOut>
         </span>
       </div>
 
