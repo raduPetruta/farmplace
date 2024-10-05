@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-// @ts-ignore
+//@ts-expect-error
 import { v4 as uuid } from 'uuid'
 import { createPost } from './actions';
 import { useUser } from '@clerk/nextjs';
