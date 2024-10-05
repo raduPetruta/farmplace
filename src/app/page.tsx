@@ -1,6 +1,7 @@
 import SearchBar from "./_components/searchbar";
 import Categories from "./_components/categories";
 import Footer from "./_components/footer";
+import Posts from "./(pages)/posts/page";
 
 export default function HomePage() {
   return (
@@ -8,6 +9,7 @@ export default function HomePage() {
       <div className="flex flex-col min-h-screen">
         <SearchBar />
         <Categories />
+        <Posts/>
         {/* Add any other content */}
       </div>
     </main>
