@@ -14,6 +14,7 @@ const config = {
     "plugin:@typescript-eslint/stylistic-type-checked"
   ],
   "rules": {
+    'prefer-const': 'off',
     "@typescript-eslint/ban-ts-comment": "off",
     "@typescript-eslint/no-wrapper-object-types": "off",
     "@typescript-eslint/only-throw-error" : "off",
