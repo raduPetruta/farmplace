@@ -7,7 +7,6 @@ import { useUploadThing } from "~/utils/uploadthing";
 // inferred input off useUploadThing
 type Input = Parameters<typeof useUploadThing>;
 
-
 const uploadedImages: any = []; 
 
 const useUploadThingInputProps = (...args: Input) => {
@@ -20,6 +19,7 @@ const useUploadThingInputProps = (...args: Input) => {
     const selectedFiles = Array.from(e.target.files);
     const result = await $ut.startUpload(selectedFiles);
 
+    uploadedImages.length = 0;
     uploadedImages.push(result);
     console.log("uploaded files", result);
     // TODO: persist result in state maybe?
@@ -35,7 +35,7 @@ const useUploadThingInputProps = (...args: Input) => {
 };
 
 export function getImagesUrls() {
-    return uploadedImages;
+  return uploadedImages;
 } 
 
 export function SimpleUploadButton() {

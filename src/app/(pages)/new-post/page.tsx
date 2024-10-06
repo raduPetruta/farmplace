@@ -47,27 +47,28 @@ const NewPost = () => {
     };
     
     await createPost(newPost);
-    if(newPost)
+    if(newPost) {
+      alert('New Post added succesfully!');
       router.push('/');
-    console.log('New Post:', newPost);
+    }
   };
   
-  const handleChange = (e: any) => {
-    console.log(e.target.id);
-    if(e.target.id === "upload-button") {
-      if(imagesSelected == true) 
-       setImagesSelected(false)
-      if(imagesSelected == false) 
-        setImagesSelected(true)
-    }
-    console.log(imagesSelected)
-  }
+  // const handleChange = (e: any) => {
+  //   console.log(e.target.id);
+  //   if(e.target.id === "upload-button") {
+  //     if(imagesSelected == true) 
+  //      setImagesSelected(false)
+  //     if(imagesSelected == false) 
+  //       setImagesSelected(true)
+  //   }
+  //   console.log(imagesSelected)
+  // }
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-[#f5f5f5]">
       <div className="bg-white p-8 rounded shadow-md w-full max-w-2xl">
         <h2 className="text-2xl font-bold mb-6 text-[#003338]">Add New Product</h2>
-        <form onSubmit={handleSubmit} onChange={handleChange}>
+        <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <label className="block text-gray-700 font-bold mb-2">Title</label>
             <input
@@ -105,26 +106,6 @@ const NewPost = () => {
           <div className="mb-4">
             <label className="block text-gray-700 font-bold mb-2">Images (comma-separated URLs)</label>
             <SimpleUploadButton/>
-            
-            { imagesSelected ? 
-            ( 
-              <div>
-                {getImagesUrls().map((image: any) => (
-                  <div key={image.id}>
-                    <img src={image[0].url} alt="image" className="w-full h-full object-cover" />
-                  </div>
-                ))}
-              </div>
-            )
-            :
-            (
-            <div>
-              No Images Selected
-            </div>
-            )
-            }
-
-
           </div>
 
           <div className="mb-4">

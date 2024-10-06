@@ -5,15 +5,20 @@ import { posts } from "~/server/schemas/posts";
 import { eq } from 'drizzle-orm';  // Adjust based on your project structure
 
 export async function createPost(post: any) {
-    await db.insert(posts).values(post);
+    try {
+        await db.insert(posts).values(post);
+    } catch (error) {
+        console.error('Error creating post:', error);
+        throw new Error('Could not create post');
+    }
 }
 
 export async function getPosts() {
-    const allPosts = await db.select().from(posts);
-    return allPosts;   
-}
-
-export async function getPostsByUserId(userId: string) {
-    const allPostsByUserId = await db.select().from(posts).where(eq(posts.userId, userId));
-    return allPostsByUserId;
+    try{
+        const allPosts = await db.select().from(posts);
+        return allPosts;   
+    } catch (error) {
+        console.error('Error fetching posts:', error);
+        throw new Error('Could not fetch posts');
+    }
 }
