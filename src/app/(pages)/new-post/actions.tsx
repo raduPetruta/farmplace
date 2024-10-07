@@ -15,5 +15,5 @@ export async function createPost(post: any) {
 
 export async function getPosts() {
     const allPosts = await db.select().from(posts);
-    return [];   
+    return allPosts;   
 }
