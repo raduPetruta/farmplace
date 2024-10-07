@@ -14,11 +14,6 @@ export async function createPost(post: any) {
 }
 
 export async function getPosts() {
-    try{
-        const allPosts = await db.select().from(posts);
-        return allPosts;   
-    } catch (error) {
-        console.error('Error fetching posts:', error);
-        throw new Error('Could not fetch posts');
-    }
+    const allPosts = await db.select().from(posts);
+    return [];   
 }

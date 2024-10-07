@@ -45,7 +45,7 @@ export function SimpleUploadButton() {
     return (
         <div className="">
             <label htmlFor="upload-button">Upload</label>
-            <input id="upload-button" type="file" className="sr-only" {...inputProps} />
+            <input id="upload-button" type="file" className="sr-only" {...inputProps} multiple/>
         </div>
     )
 }
