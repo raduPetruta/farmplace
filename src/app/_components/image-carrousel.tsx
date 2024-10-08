@@ -25,8 +25,8 @@ const ImageCarrousel = (allImages: any) => {
             src={allImages.allImages[currentImage]}
             alt="Product"
             className="w-full h-auto object-cover rounded-lg"
-            width={50}
-            height={50}
+            width={550}
+            height={550}
         />
         {/* Arrows */}
         <button

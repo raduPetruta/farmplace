@@ -5,6 +5,7 @@ import { format } from 'path';
 import React from 'react';
 import ImageCarrousel from '~/app/_components/image-carrousel';
 import GoogleMapView from '~/app/_components/google-map';
+import MapBox from '~/app/_components/google-map';
 
 export default async function PostDetailPage({ params }: { params: { postId: string } }) {
   const post = await getPostById(params.postId);
@@ -68,7 +69,7 @@ export default async function PostDetailPage({ params }: { params: { postId: str
                {/* Location Map */}
               <div className="mt-6">
                 <h2 className="text-lg font-bold">Location</h2>
-                <GoogleMapView location={location} />
+                <MapBox />
               </div>
 
             </div>
