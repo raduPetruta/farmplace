@@ -1,13 +1,16 @@
 CREATE TABLE `chats` (
 	`id` text PRIMARY KEY NOT NULL,
+	`sender_id` text,
+	`receiverId` text,
 	`name` text NOT NULL,
 	`createdAt` text DEFAULT (CURRENT_TIMESTAMP) NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE `messages` (
 	`id` text PRIMARY KEY NOT NULL,
-	`chatId` text NOT NULL,
-	`content` text NOT NULL,
+	`messageText` text NOT NULL,
+	`conversationId` text NOT NULL,
+	`senderId` text NOT NULL,
 	`createdAt` text DEFAULT (CURRENT_TIMESTAMP) NOT NULL
 );
 --> statement-breakpoint

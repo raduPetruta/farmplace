@@ -21,8 +21,6 @@ export default async function PostsPage() {
             </Link>
           </li>
         ))}
-
-
       </ul>
     </div>
   );
