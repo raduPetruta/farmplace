@@ -1,10 +1,7 @@
 import { notFound } from 'next/navigation'; // For handling 404
 import { getPostById } from '../actions';
-import Image from 'next/image';
-import { format } from 'path';
 import React from 'react';
 import ImageCarrousel from '~/app/_components/image-carrousel';
-import GoogleMapView from '~/app/_components/google-map';
 import MapBox from '~/app/_components/google-map';
 
 export default async function PostDetailPage({ params }: { params: { postId: string } }) {
