@@ -7,6 +7,7 @@ import { createPost } from './actions';
 import { useUser } from '@clerk/nextjs';
 import { getImagesUrls, SimpleUploadButton } from '~/app/_components/simple-upload-button';
 import { useRouter } from 'next/navigation';
+import NotLoggedIn from '~/app/_components/not-logged-in';
 
 const NewPost = () => {
   const router = useRouter();
@@ -17,8 +18,6 @@ const NewPost = () => {
   const [description, setDescription] = useState('');
   const [location, setLocation] = useState('');
   const [isNegotiable, setIsNegotiable] = useState(false);
-  const [imagesSelected, setImagesSelected] = useState(false);
-  let images : any = null;
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
@@ -63,6 +62,14 @@ const NewPost = () => {
   //   }
   //   console.log(imagesSelected)
   // }
+
+  if(!loggedInUser){
+    return(
+      <div>
+        <NotLoggedIn message='create a new post!'/>
+      </div>
+    )
+  }
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-[#f5f5f5]">
