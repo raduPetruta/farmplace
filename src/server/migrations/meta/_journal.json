@@ -8,6 +8,13 @@
       "when": 1728557685708,
       "tag": "0000_next_jamie_braddock",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1728817757064,
+      "tag": "0001_chief_wolverine",
+      "breakpoints": true
     }
   ]
 }

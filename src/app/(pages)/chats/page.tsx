@@ -1,15 +1,16 @@
 // pages/index.js (Server Component)
-import { SignedIn } from '@clerk/nextjs';
+'use client'
 import ConversationList from '~/app/_components/conversation-list';
-import { getConversationsForUser } from './actions';
-import { auth } from '@clerk/nextjs/server';
 import NotLoggedIn from '~/app/_components/not-logged-in';
+import { useState } from 'react';
+import ConversationView from '~/app/_components/conversation-view';
+import { SignedIn, useUser } from '@clerk/nextjs';
 
-export default async function Chats() {
-  const { userId } = await auth(); // Server-side authentication check
-  const conversations = await getConversationsForUser(userId);
-  
-  if(!userId){
+export default function Chats() {
+  const user  = useUser(); // Server-side authentication check
+  const [selectedConversation, setSelectedConversation] = useState(null);
+
+  if(!user.user){
     return (
       <div>
         <NotLoggedIn message="access the conversations!"/>
@@ -18,10 +19,17 @@ export default async function Chats() {
   }
 
   return (
-    <div style={{ display: 'flex', gap: '20px' }}>
+    <div style={{ display: 'flex', height: '100vh' }}>
       <SignedIn>
-        <ConversationList userId={userId} conversations={conversations} />
+        <div style={{ width: '30%', borderRight: '1px solid #ccc' }}>
+          <ConversationList userId={user.user.id} onSelectConversation={setSelectedConversation} />
+        </div>
+        <div style={{ width: '70%' }}>
+          <ConversationView conversation={selectedConversation} />
+        </div>
       </SignedIn>
     </div>
   );
+
+
 }

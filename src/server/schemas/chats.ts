@@ -9,4 +9,5 @@ export const chats = sqliteTable('chats', {
   receiverId: text("receiverId"),
   conversationName: text('name').notNull(),
   createdAt: text('createdAt').default(sql`(CURRENT_TIMESTAMP)`).notNull(),
+  postId: text('postId').notNull()
 });

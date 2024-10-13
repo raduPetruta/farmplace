@@ -1,0 +1,1 @@
+ALTER TABLE `chats` ADD `postId` text NOT NULL;
