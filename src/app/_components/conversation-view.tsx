@@ -1,12 +1,13 @@
-'use client'
 import React from 'react'
 
-const ConversationView = ({conversation}:{conversation: any}) => {
+const ConversationView = ({conversation}: any) => {
+  console.log("conv", conversation)
   return (
     <div>
         ConversationView
         <div>
-            {conversation}
+          {conversation.conversationName}
+
         </div>
     </div>
   )

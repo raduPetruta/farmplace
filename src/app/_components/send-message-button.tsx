@@ -1,12 +1,18 @@
 'use client'
 import React from 'react'
 import { createConversationFromPost } from '../(pages)/chats/actions'
+import { useRouter } from 'next/navigation';
 
-const SendMessageButton = async ({senderId, receiverId, postId}: any) => {
+const SendMessageButton = async ({senderId, receiverId, postId, setSelectedConversation}: any) => {
+  const router = useRouter();
 
   const sendMessage: any = async (senderId: any, receiverId: any, postId: any) => {
     //create a conv with               senderId       postId   receiverId
-    await createConversationFromPost(senderId, receiverId, postId) 
+    const newConversation = await createConversationFromPost(senderId, receiverId, postId);
+    if (newConversation) {
+        router.push('/chats');
+        setSelectedConversation(newConversation);
+    }
   }
       
   return (
