@@ -1,11 +1,16 @@
 import { notFound } from 'next/navigation'; // For handling 404
 import { getPostById } from '../actions';
-import React from 'react';
+import React, { MouseEventHandler } from 'react';
 import ImageCarrousel from '~/app/_components/image-carrousel';
 import MapBox from '~/app/_components/google-map';
+import { useUser } from '@clerk/nextjs';
+import { createConversationFromPost } from '../../chats/actions';
+import { auth } from '@clerk/nextjs/server';
+import SendMessageButton from '~/app/_components/send-message-button';
 
 export default async function PostDetailPage({ params }: { params: { postId: string } }) {
   const post = await getPostById(params.postId);
+  const user = auth();
   let allImages : any = []
 
   if (!post) {
@@ -42,9 +47,8 @@ export default async function PostDetailPage({ params }: { params: { postId: str
               {/* Seller info */}
               <h3 className="text-lg font-bold">Seller Name</h3>
               <p className="text-gray-600">Rating: ★★★★☆</p>
-              <button className="mt-2 bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition duration-200">
-                Send Message
-              </button>
+              
+              <SendMessageButton senderId={user?.userId} receiverId={post?.userId} postId={post?.id}/>
 
               {/* Product details */}
               <div className="space-y-2 mt-4">

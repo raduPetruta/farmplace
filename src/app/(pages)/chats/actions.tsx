@@ -22,7 +22,7 @@ export const getConversationsForUser = async (userId: any) => {
     }    
 };
 
-export const createConversationFromPost = async (userId: any, postId: any, receiverId: any, createdAt: any) => {
+export const createConversationFromPost = async (userId: any, receiverId: any, postId: any) => {
     try {
         //apesi pe mesaj
         //verifici daca exista deja o conv cu postId 
@@ -33,21 +33,22 @@ export const createConversationFromPost = async (userId: any, postId: any, recei
         // senderId e logged in user
         // receiverId e cel care a creat postul
         const existingConversation = await getConversationByPostId(postId);
+        console.log("Exx", existingConversation)
 
-        if(!existingConversation){
+        if(existingConversation.length === 0){
             const senderName = await getUserById(userId);
             const receiverName = await getUserById(receiverId); 
             const post = await getPostById(postId);
             const conversationName = post?.title + "-" + senderName[0]?.name + "-" + receiverName[0]?.name;
-
-            return await db
+            
+            await db
             .insert(chats)
             .values({
                       id: uuid(), 
                       senderId: userId, 
                       receiverId:  receiverId, 
                       conversationName: conversationName, 
-                      createdAt: createdAt, 
+                      createdAt: Math.floor(Date.now() /1000).toString(), 
                       postId: postId
                   })
             .execute();
