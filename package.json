@@ -9,11 +9,13 @@
     "db:migrate": "drizzle-kit migrate",
     "db:push": "drizzle-kit push",
     "db:studio": "drizzle-kit studio",
-    "dev": "next dev --turbo",
+    "dev": "next dev",
     "lint": "next lint",
     "start": "next start"
   },
   "dependencies": {
+    "@clerk/backend": "^1.13.10",
+    "@clerk/clerk-sdk-node": "^5.0.50",
     "@clerk/nextjs": "^5.6.4",
     "@libsql/client": "^0.14.0",
     "@react-google-maps/api": "^2.19.3",
