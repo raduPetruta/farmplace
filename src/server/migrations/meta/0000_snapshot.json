@@ -1,11 +1,11 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "c43fbc7b-d1bd-45bd-8b2d-0c20d2d7ebd9",
+  "id": "79017274-c0b9-4d76-b12c-ca1522a7bdec",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
-    "chats": {
-      "name": "chats",
+    "conversations": {
+      "name": "conversations",
       "columns": {
         "id": {
           "name": "id",
@@ -42,6 +42,29 @@
           "notNull": true,
           "autoincrement": false,
           "default": "(CURRENT_TIMESTAMP)"
+        },
+        "postId": {
+          "name": "postId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "lastSentMessageDate": {
+          "name": "lastSentMessageDate",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "(CURRENT_TIMESTAMP)"
+        },
+        "lastSentMessageId": {
+          "name": "lastSentMessageId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "''"
         }
       },
       "indexes": {},

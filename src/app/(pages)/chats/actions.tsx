@@ -1,5 +1,5 @@
 import { db } from "~/server/db";
-import { chats } from "~/server/schemas/chats";
+import { conversations } from "~/server/schemas/conversations";
 import { eq, or } from 'drizzle-orm';  // Adjust based on your project structure
 import { messages } from "~/server/schemas/messages";
 import { v4 as uuid } from 'uuid'
@@ -9,10 +9,10 @@ import { getUserById } from "../profile/actions";
 export const getConversationsForUser = async (userId: any) => {
     try {
         const allPostsByUserId = await db
-                                        .select().from(chats)
+                                        .select().from(conversations)
                                         .where(or(
-                                            eq(chats.senderId, userId),
-                                            eq(chats.receiverId, userId)
+                                            eq(conversations.senderId, userId),
+                                            eq(conversations.receiverId, userId)
                                             ))
                                         .execute();
         return allPostsByUserId;
@@ -42,7 +42,7 @@ export const createConversationFromPost = async (userId: any, receiverId: any, p
             const conversationName = post?.title + "-" + senderName[0]?.name + "-" + receiverName[0]?.name;
             
             await db
-            .insert(chats)
+            .insert(conversations)
             .values({
                       id: uuid(), 
                       senderId: userId, 
@@ -64,8 +64,8 @@ export const getConversationByPostId = async (postId: any) => {
     try {
         return await db
           .select()
-          .from(chats)
-          .where(eq(chats.postId, postId))
+          .from(conversations)
+          .where(eq(conversations.postId, postId))
           .execute();
     } catch (error) {
         console.error('Failed getting conversation by post id', error);

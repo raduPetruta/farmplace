@@ -1,9 +1,12 @@
-CREATE TABLE `chats` (
+CREATE TABLE `conversations` (
 	`id` text PRIMARY KEY NOT NULL,
 	`sender_id` text,
 	`receiverId` text,
 	`name` text NOT NULL,
-	`createdAt` text DEFAULT (CURRENT_TIMESTAMP) NOT NULL
+	`createdAt` text DEFAULT (CURRENT_TIMESTAMP) NOT NULL,
+	`postId` text NOT NULL,
+	`lastSentMessageDate` text DEFAULT (CURRENT_TIMESTAMP),
+	`lastSentMessageId` text DEFAULT ''
 );
 --> statement-breakpoint
 CREATE TABLE `messages` (

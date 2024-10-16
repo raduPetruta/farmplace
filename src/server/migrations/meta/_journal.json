@@ -5,22 +5,8 @@
     {
       "idx": 0,
       "version": "6",
-      "when": 1728557685708,
-      "tag": "0000_next_jamie_braddock",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "6",
-      "when": 1728817757064,
-      "tag": "0001_chief_wolverine",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "6",
-      "when": 1729008751876,
-      "tag": "0002_sudden_cerebro",
+      "when": 1729059981886,
+      "tag": "0000_past_bloodaxe",
       "breakpoints": true
     }
   ]
