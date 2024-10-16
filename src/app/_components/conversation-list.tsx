@@ -23,7 +23,7 @@ export default function ConversationList({ userId, onSelectConversation }: any) 
   }, [userId]);
 
   useEffect(() => {
-    async function fetchPostsFromConversations(){
+    async function fetchPostsFromConversations() { 
       const posts : any = [];
       for(const conversation of conversations){
         const post = await getPostById(conversation.postId);
@@ -54,19 +54,23 @@ export default function ConversationList({ userId, onSelectConversation }: any) 
     return defaultPostImageSrc;
   }
 
-  function getUserEmail(userId: any){
+  function getUserEmail(userId: any) {
     const found = userEmails.find(user => user.id === userId);
     if(found)
       return found.emailAddresses[0].emailAddress;
   }
 
-  function getTitleOfPost(postId: any){
+  function getTitleOfPost(postId: any) {
     const post = postsFromConversations.find(post => post.id === postId);
     if(post)
       return post.title;
   }
 
-  console.log("from",postsFromConversations)
+  function formatLastMessageDate(lastMessageDate: any){
+    const [date] = lastMessageDate.split(" ");  // Split by space to separate the date and time
+    const [year, month, day] = date.split("-");  // Split the date part by "-"
+    return `${month}-${day}`;
+  }
 
   return (
     <div>
@@ -85,7 +89,7 @@ export default function ConversationList({ userId, onSelectConversation }: any) 
               <div className="text-gray-600 text-sm">Title: {getTitleOfPost(conversation.postId)}</div>
               <div className="text-gray-800 text-xs">Schimburi te intereseaza?</div>
             </div>
-            <div className="text-xs text-gray-500">06.10</div>
+            <div className="text-xs text-gray-500 font-semibold">{formatLastMessageDate(conversation.lastSentMessageDate)}</div>
           </div>
 
         </div>
