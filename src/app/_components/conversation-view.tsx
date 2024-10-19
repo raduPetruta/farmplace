@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { v4 as uuid } from 'uuid';
 import { getCurrentDate, sortByDate } from '../../utils/util-functions';
 import { saveMessageToConversation, getMessagesByIds } from '../(pages)/chats/actions'; // import the necessary actions
@@ -14,6 +14,9 @@ const ConversationView = ({ conversation }: any) => {
   const [messages, setMessages] = useState<any[]>([]);
   const [showEmojiPicker, setShowEmojiPicker] = useState(false); // Toggle for the emoji picker
   const loggedInUser = useUser().user!;
+  
+  // Ref to track the end of the message list
+  const endOfMessagesRef = useRef<null | HTMLDivElement>(null);
 
   const formatMessages = () => {
     return conversation?.messagesIds?.split(",").filter((word: string) => word !== "");
@@ -39,11 +42,22 @@ const ConversationView = ({ conversation }: any) => {
     }
   };
 
+  // Automatically scroll to the latest message
+  const scrollToBottom = () => {
+    if (endOfMessagesRef.current) {
+      endOfMessagesRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   useEffect(() => {
     if (conversation) {
       fetchMessages();
     }
   }, [conversation]);
+
+  useEffect(() => {
+    scrollToBottom(); // Scroll to the bottom when messages are updated
+  }, [messages]);
 
   const onSend = async () => {
     const newMessage = {
@@ -63,36 +77,64 @@ const ConversationView = ({ conversation }: any) => {
   const onEmojiClick = (emoji: any) => {
     setMessageText(prev => prev + emoji.emoji); // Add the emoji to the message text
   };
-  
 
   return (
     <div className="flex flex-col h-screen">
       {/* Conversation Header */}
       <div className="p-4 border-b border-gray-200">
-        <h2 className="text-xl font-semibold">{conversation.conversationName}</h2>
+        <h2 className="text-xl font-semibold">{conversation.conversationName.split("-")[0]}</h2>
       </div>
 
       {/* Conversation Messages */}
       <div className="flex-1 p-4 overflow-y-auto">
         {messages.length > 0 ? (
-          messages.map((message: any) => (
-            <div key={message.id} className="flex items-start space-x-4 mb-4">
-              {/* Sender image */}
-              <img
-                src={message.sender?.imageUrl || '/default-profile.png'} // Assuming there's a default image
-                alt="Profile picture"
-                className="w-10 h-10 rounded-full"
-              />
-              <div>
-                {/* Sender name */}
-                <div className="font-semibold text-gray-800">
-                  {message.sender?.username || message.sender?.emailAddresses[0].emailAddress || 'Unknown user'}
+          <>
+            {messages.map((message: any) => {
+              const isLoggedInUser = message.senderId === loggedInUser.id;
+              return (
+                <div
+                  key={message.id}
+                  className={`flex ${isLoggedInUser ? 'justify-end' : 'justify-start'} mb-4`}
+                >
+                  <div
+                    className={`flex items-center space-x-4 max-w-xs break-words ${
+                      isLoggedInUser
+                        ? 'bg-[#033c3e] text-white' // Logged-in user's messages with teal background
+                        : 'bg-gray-200 text-black'   // Other user's messages with light gray background
+                    } rounded-lg p-3`}
+                    style={{ minHeight: '50px' }} // Ensures some height for better alignment
+                  >
+                    {!isLoggedInUser && (
+                      <img
+                        src={message.sender?.imageUrl || '/default-profile.png'}
+                        alt="Profile picture"
+                        className="w-10 h-10 rounded-full"
+                      />
+                    )}
+
+                    <div className="flex flex-col justify-center">
+                      {!isLoggedInUser && (
+                        <div className="font-semibold">
+                          {message.sender?.username || message.sender?.emailAddresses[0].emailAddress || 'Unknown user'}
+                        </div>
+                      )}
+                      <div className="text-sm">{message.messageText}</div>
+                    </div>
+
+                    {isLoggedInUser && (
+                      <img
+                        src={loggedInUser.imageUrl || '/default-profile.png'}
+                        alt="Profile picture"
+                        className="w-10 h-10 rounded-full"
+                      />
+                    )}
+                  </div>
                 </div>
-                {/* Message text */}
-                <div className="text-gray-600">{message.messageText}</div>
-              </div>
-            </div>
-          ))
+              );
+            })}
+            {/* Empty div at the end to scroll to */}
+            <div ref={endOfMessagesRef} />
+          </>
         ) : (
           <div className="text-gray-500">No messages yet. Start chatting!</div>
         )}

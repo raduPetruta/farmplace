@@ -103,8 +103,7 @@ export default function ConversationList({ userId, onSelectConversation }: any) 
               <img src={conversationImagesMap.get(conversation.postId)} alt="Product" width={40} className="w-10 h-10 rounded-full object-cover" />
             </div>
             <div className="flex-1">
-              <div className="font-bold text-sm">{getUserEmail(conversation.receiverId) || 'Unknown User'}</div>
-              <div className="text-gray-600 text-sm">Title: {getTitleOfPost(conversation.postId)}</div>
+              <div className="font-bold text-sm">Title: {getTitleOfPost(conversation.postId)}</div>
               <div className="text-gray-800 text-xs">{lastSentMessageMap.get(conversation.postId)}</div>
             </div>
             <div className="text-xs text-gray-500 font-semibold">{formatLastMessageDate(conversation.lastSentMessageDate)}</div>
