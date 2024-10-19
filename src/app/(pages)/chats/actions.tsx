@@ -1,6 +1,6 @@
 import { db } from "~/server/db";
 import { conversations } from "~/server/schemas/conversations";
-import { eq, or } from 'drizzle-orm';  // Adjust based on your project structure
+import { eq, inArray, or } from 'drizzle-orm';  // Adjust based on your project structure
 import { messages } from "~/server/schemas/messages";
 import { v4 as uuid } from 'uuid'
 import { getPostById } from "../posts/actions";
@@ -79,11 +79,61 @@ export const getMessages = async (conversationId: any) => {
       .from(messages)
       .where(eq(messages.conversationId, conversationId))
       .execute();
-  };
-  
-export const sendMessageToConversation = async (id: any, messageText: any, conversationId: any, senderId: any, createdAt: any) => {
-    return await db
-      .insert(messages)
-      .values({ id, messageText, conversationId, senderId, createdAt })
-      .execute();
+};
+
+export const getMessagesByIds = async (messageIds: string[]) => {
+    if (!messageIds || messageIds.length === 0) return [];
+    try {
+      const result = await db
+        .select()
+        .from(messages)
+        .where(inArray(messages.id, messageIds));
+      return result;
+    } catch (error) {
+      console.error("Error fetching messages by IDs:", error);
+      throw new Error("Failed to fetch messages.");
+    }
+};  
+
+export const createNewMessage = async (id: any, messageText: any, conversationId: any, senderId: any, createdAt: any) => {
+    try {
+        return await db
+            .insert(messages)
+            .values({ id, messageText, conversationId, senderId, createdAt })
+            .execute();
+    } catch (error) {
+        console.log("Error while creating new message", error)
+    }
+}
+
+export const saveMessageToConversation = async (conversation: any, message: any) => {
+    try {
+        if(message.messageText && conversation.id) {
+            const currentConversation: any = await db
+                .select()
+                .from(conversations)
+                .where(eq(conversations.id, conversation.id))
+                .limit(1); 
+            if (currentConversation) {
+                const existingMessagesIds = currentConversation[0].messagesIds;
+                let updatedMessagesIds: any = "";                                                        
+
+                await createNewMessage( message.id, 
+                                        message.messageText, 
+                                        message.conversationId, 
+                                        message.senderId, 
+                                        message.createdAt ); 
+
+                existingMessagesIds ? updatedMessagesIds = existingMessagesIds + "," + message.id: 
+                                      updatedMessagesIds = message.id; 
+
+                await db.update(conversations)
+                        .set({ messagesIds: updatedMessagesIds })
+                        .where(eq(conversations.id, conversation.id));
+                console.log("Message successfully added to the conversation.");
+            }
+        }
+    } catch (error) {
+        console.log("Error saving message to conversation", error);
+    }
 };

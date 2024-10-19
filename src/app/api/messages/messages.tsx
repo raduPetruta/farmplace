@@ -1,5 +1,5 @@
 // pages/api/messages.js
-import { getMessages, sendMessageToConversation } from "~/app/(pages)/chats/actions";
+import { getMessages, saveMessageToConversation } from "~/app/(pages)/chats/actions";
 
 export default async function handler(req: any, res: any) {
   if (req.method === 'GET') {
@@ -15,7 +15,7 @@ export default async function handler(req: any, res: any) {
     const { id, messageText, conversationId, senderId, createdAt } = req.body;
 
     try {
-      const newMessage = await sendMessageToConversation(id, messageText, conversationId, senderId, createdAt);
+      const newMessage = await saveMessageToConversation(id, messageText, conversationId, senderId, createdAt);
       res.status(201).json(newMessage);
     } catch (error) {
       console.error("Error sending message:", error);

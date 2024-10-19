@@ -19,6 +19,17 @@ export const getAllUsersClerk = async () => {
   }
 };
 
+export const getClerkUserById = async (userId: any) => {
+  try {
+    // Fetch the user by Id from Clerk
+    const response = await clerkClient.users.getUser(userId);
+    console.log("response clerkId", response);
+    return JSON.parse(JSON.stringify(response)); // Return only the users array
+  } catch (error) {
+    console.error("Failed to fetch users from Clerk:", error);
+    throw new Error("Failed to fetch users from Clerk");
+  }
+};
 
 export const getUserById = async (userId: any) => {
   try {

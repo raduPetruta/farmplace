@@ -12,4 +12,5 @@ export const conversations = sqliteTable('conversations', {
   postId: text('postId').notNull(),
   lastSentMessageDate: text('lastSentMessageDate').default(sql`(CURRENT_TIMESTAMP)`),
   lastSentMessageId: text('lastSentMessageId').default(""),
+  messagesIds: text('messagesIds').default(""),
 });
