@@ -95,6 +95,22 @@ export const getMessagesByIds = async (messageIds: string[]) => {
     }
 };  
 
+export const getMessageById = async (messageId: any) => {
+    if (!messageId) return "";
+    try {
+      const result = await db
+        .select()
+        .from(messages)
+        .where(eq(messages.id, messageId))
+        .limit(1)
+        .execute(); 
+      return result;
+    } catch (error) {
+      console.error("Error fetching messages by IDs:", error);
+      throw new Error("Failed to fetch messages.");
+    }
+}
+
 export const createNewMessage = async (id: any, messageText: any, conversationId: any, senderId: any, createdAt: any) => {
     try {
         return await db
@@ -128,7 +144,9 @@ export const saveMessageToConversation = async (conversation: any, message: any)
                                       updatedMessagesIds = message.id; 
 
                 await db.update(conversations)
-                        .set({ messagesIds: updatedMessagesIds })
+                        .set({ messagesIds: updatedMessagesIds, 
+                               lastSentMessageId: message.id, 
+                               lastSentMessageDate: message.createdAt})
                         .where(eq(conversations.id, conversation.id));
                 console.log("Message successfully added to the conversation.");
             }

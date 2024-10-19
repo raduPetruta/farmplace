@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { getConversationsForUser } from "../(pages)/chats/actions";
+import { getConversationsForUser, getMessageById } from "../(pages)/chats/actions";
 import { getPostById } from '../(pages)/posts/actions';
 import { getAllUsersClerk } from '../(pages)/profile/actions';
 
@@ -9,6 +9,7 @@ export default function ConversationList({ userId, onSelectConversation }: any) 
   const defaultPostImageSrc = "https://utfs.io/f/pNntNKO2tJAb4xDR6Wi2DOKUW0AbJkt8BZ6zmfXy1LgQ5FNM";
   const [conversations, setConversations] = useState<any[]>([]);
   const [conversationImagesMap, setConversationImagesMap] = useState<Map<any, string>>(new Map());
+  const [lastSentMessageMap, setLastSentMessageMap] = useState<Map<any, string>>(new Map());
   const [userEmails, setUserEmails] = useState<any[]>([]);
   const [postsFromConversations, setPostsFromConversations] = useState<any[]>([]);
 
@@ -46,12 +47,29 @@ export default function ConversationList({ userId, onSelectConversation }: any) 
     fetchConversationsFirstImages();
   }, [conversations]);
 
+  useEffect(() => {
+    async function fetchConversationsLastSentMessage() {
+      const lastSentMessagesMap = new Map<any, string>();
+      for (const conversation of conversations) {
+        const lastSentMessage = await getLastSentMessageOfConversation(conversation.lastSentMessageId);
+        lastSentMessagesMap.set(conversation.postId, lastSentMessage || "");
+      }
+      setLastSentMessageMap(lastSentMessagesMap);
+    }
+    fetchConversationsLastSentMessage();
+  }, [conversations]);
+
   async function getFirstImageOfPost(postId: any) {
     const post = await getPostById(postId);
     if (post) {
       return post.imagesUrls?.split(',')[0]?.toString();
     }
     return defaultPostImageSrc;
+  }
+
+  async function getLastSentMessageOfConversation(lastSentMessageId: any) {
+    const lastSentMessage = await getMessageById(lastSentMessageId);
+    return lastSentMessage ? lastSentMessage[0]?.messageText : ""; 
   }
 
   function getUserEmail(userId: any) {
@@ -87,11 +105,10 @@ export default function ConversationList({ userId, onSelectConversation }: any) 
             <div className="flex-1">
               <div className="font-bold text-sm">{getUserEmail(conversation.receiverId) || 'Unknown User'}</div>
               <div className="text-gray-600 text-sm">Title: {getTitleOfPost(conversation.postId)}</div>
-              <div className="text-gray-800 text-xs">Schimburi te intereseaza?</div>
+              <div className="text-gray-800 text-xs">{lastSentMessageMap.get(conversation.postId)}</div>
             </div>
             <div className="text-xs text-gray-500 font-semibold">{formatLastMessageDate(conversation.lastSentMessageDate)}</div>
           </div>
-
         </div>
       ))}
     </div>
